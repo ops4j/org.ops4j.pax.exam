@@ -17,6 +17,8 @@
  */
 package org.ops4j.pax.exam.forked;
 
+import static org.ops4j.pax.exam.CoreOptions.options;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,8 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
+import org.eclipse.osgi.launch.EquinoxFactory;
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.ExamSystem;
@@ -37,6 +41,7 @@ import org.ops4j.pax.exam.TestContainer;
 import org.ops4j.pax.exam.TestContainerException;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
 import org.ops4j.pax.exam.options.UrlReference;
+import org.ops4j.pax.exam.spi.DefaultExamSystem;
 import org.ops4j.pax.exam.spi.PaxExamRuntime;
 import org.ops4j.pax.tinybundles.TinyBundles;
 import org.osgi.framework.BundleActivator;
@@ -47,6 +52,10 @@ import org.osgi.framework.Constants;
 import static org.ops4j.pax.tinybundles.TinyBundles.rawBuilder;
 
 public class ForkedTestContainerFactoryTest {
+    @After
+    public void reset() {
+        System.clearProperty(org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT); // set implicitly
+    }
 
     @Test
     public void withBootClasspathMvn() throws BundleException, IOException,
@@ -130,18 +139,19 @@ public class ForkedTestContainerFactoryTest {
 
     @Test()
     public void verifyPortConfiguration() throws Exception {
-        ForkedFrameworkFactory frameworkFactory = new ForkedFrameworkFactory(null);
+        ForkedTestContainer container = new ForkedTestContainer(
+                DefaultExamSystem.create(options()), new EquinoxFactory());
 
-        new SystemPropertyRunnable(org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT, "15000") {
+        new SystemPropertyRunnable(org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT, "15000") {
             @Override
             protected void doRun() {
-                Assert.assertThat(frameworkFactory.getPort(), CoreMatchers.equalTo(15000));
+                Assert.assertThat(container.getPort(), CoreMatchers.equalTo(15000));
             }
         }.run();
-        new SystemPropertyRunnable(org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT_RANGE_LOWERBOUND, "15000") {
+        new SystemPropertyRunnable(org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT_RANGE_LOWERBOUND, "15000") {
             @Override
             protected void doRun() {
-                Assert.assertThat(frameworkFactory.getPort(), CoreMatchers.equalTo(15000));
+                Assert.assertThat(container.getPort(), CoreMatchers.equalTo(15000));
             }
         }.run();
     }
