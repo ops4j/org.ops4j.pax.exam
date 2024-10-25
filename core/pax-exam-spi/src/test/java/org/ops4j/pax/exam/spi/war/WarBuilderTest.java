@@ -38,7 +38,7 @@ public class WarBuilderTest {
     private File tempDir;
     private ZipFile war;
     
-    private static final String MOCKITO_VERSION = "5.11.0"; // needs to match dependency in project
+    private static final String MOCKITO_VERSION = "5.14.2"; // needs to match dependency in project
 
     @BeforeClass
     public static void setUp() throws IOException {
