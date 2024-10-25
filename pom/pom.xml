@@ -31,7 +31,6 @@
         <dependency.logback.version>1.2.12</dependency.logback.version>
 
         <dependency.maven.version>3.9.7</dependency.maven.version>
-        <dependency.spring.version>5.3.30</dependency.spring.version>
         <dependency.testng.version>7.10.2</dependency.testng.version>
         <dependency.org.apache.servicemix.bundles.hamcrest.version>1.3_1</dependency.org.apache.servicemix.bundles.hamcrest.version>
         <dependency.org.apache.servicemix.bundles.junit.version>4.13.2_1</dependency.org.apache.servicemix.bundles.junit.version>
@@ -422,11 +421,6 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>asm</groupId>
-                <artifactId>asm</artifactId>
-                <version>9.7.0</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>1.26.2</version>
@@ -502,18 +496,6 @@
                 <groupId>jakarta.ws.rs</groupId>
                 <artifactId>jakarta.ws.rs-api</artifactId>
                 <version>2.1.6</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${dependency.spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${dependency.spring.version}</version>
             </dependency>
 
             <!-- for dependency convergence -->
