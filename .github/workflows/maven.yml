@@ -21,5 +21,5 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-      - run: mvn wrapper:wrapper --no-transfer-progress -Dmaven="3.9.7"
+      - run: mvn wrapper:wrapper --no-transfer-progress -Dmaven="3.9.9"
       - run: ./mvnw -B install --fail-at-end --no-transfer-progress --file pom.xml
