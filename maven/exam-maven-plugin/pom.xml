@@ -6,7 +6,7 @@
         <groupId>org.ops4j.pax</groupId>
         <artifactId>exam</artifactId>
         <version>4.13.6-SNAPSHOT</version>
-        <relativePath>../../pom/</relativePath>
+        <relativePath>../../pom</relativePath>
     </parent>
 
     <groupId>org.ops4j.pax.exam</groupId>
@@ -17,47 +17,6 @@
     <description>
         Starts and stops a container in server mode.
     </description>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-plugin-api</artifactId>
-                <version>${dependency.maven.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-artifact</artifactId>
-                <version>${dependency.maven.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-core</artifactId>
-                <version>${dependency.maven.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-settings</artifactId>
-                <version>${dependency.maven.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-model</artifactId>
-                <version>${dependency.maven.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-repository-metadata</artifactId>
-                <version>${dependency.maven.version}</version>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
 
