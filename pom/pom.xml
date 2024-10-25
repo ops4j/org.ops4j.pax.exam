@@ -26,7 +26,7 @@
         <dependency.junit.version>4.13.2</dependency.junit.version>
         <dependency.osgicore.version>8.0.0</dependency.osgicore.version>
         <dependency.atinject.version>1.0.5</dependency.atinject.version>
-        <dependency.karaf.version>4.4.5</dependency.karaf.version>
+        <dependency.karaf.version>4.4.6</dependency.karaf.version>
 
         <dependency.logback.version>1.2.12</dependency.logback.version>
 

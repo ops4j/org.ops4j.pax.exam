@@ -50,7 +50,7 @@ public class BootClasspathLibraryOptionTest extends TestBase {
                 foundJarFiles++;
             }
         }
-        // Karaf 4.4.4 has 5 boot libs, we expect another one to show up
+        // Karaf 4.4.6 has 5 boot libs, we expect another one to show up
         assertEquals(5 + 1, foundJarFiles);
     }
 

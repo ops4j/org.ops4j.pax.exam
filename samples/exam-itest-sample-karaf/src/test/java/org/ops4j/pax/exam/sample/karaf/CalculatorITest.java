@@ -77,7 +77,7 @@ public class CalculatorITest {
 
     public static String karafVersion() {
         ConfigurationManager cm = new ConfigurationManager();
-        String karafVersion = cm.getProperty("pax.exam.karaf.version", "4.4.5");
+        String karafVersion = cm.getProperty("pax.exam.karaf.version", "4.4.6");
         return karafVersion;
     }
 
