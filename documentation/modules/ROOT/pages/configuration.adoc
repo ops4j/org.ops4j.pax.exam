@@ -1,0 +1,2 @@
+= Pax Exam Configuration
+:navtitle: Configuration
