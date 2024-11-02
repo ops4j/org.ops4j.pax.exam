@@ -28,7 +28,6 @@ import static org.ops4j.pax.exam.regression.multi.RegressionConfiguration.regres
 
 import javax.inject.Inject;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -54,7 +53,6 @@ public class PdeExplodedReferenceTest {
     }
 
     @Test
-    @Ignore
     public void getHelloService() {
         assumeTrue(isEquinox());
         Object service = ServiceLookup.getService(bc,
