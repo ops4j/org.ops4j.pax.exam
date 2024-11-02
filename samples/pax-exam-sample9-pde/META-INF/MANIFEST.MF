@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.ops4j.pax.exam.sample9.pde
 Bundle-Version: 3.1.0
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.osgi.framework;version="[1.5.0,2)"
 Export-Package: org.ops4j.pax.exam.sample9.pde
 Bundle-Activator: org.ops4j.pax.exam.sample9.pde.impl.Activator
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=11))"

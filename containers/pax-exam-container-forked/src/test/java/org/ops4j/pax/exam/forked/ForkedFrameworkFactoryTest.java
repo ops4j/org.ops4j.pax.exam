@@ -32,7 +32,6 @@ import java.util.ServiceLoader;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -68,7 +67,6 @@ public class ForkedFrameworkFactoryTest {
     }
 
     @Test
-    @Ignore // pde bundle is outdated (Bundle-RequiredExecutionEnvironment: JavaSE-1.6)
     public void forkEquinox() throws BundleException, IOException, InterruptedException,
         NotBoundException, URISyntaxException {
         ServiceLoader<FrameworkFactory> loader = ServiceLoader.load(FrameworkFactory.class);
@@ -83,10 +81,10 @@ public class ForkedFrameworkFactoryTest {
         framework.start();
 
         long bundleId = framework
-            .installBundle("file:target/bundles/regression-pde-bundle-2.3.0.jar");
+            .installBundle("file:target/bundles/pax-exam-sample9-pde.jar");
         framework.startBundle(bundleId);
 
-        framework.callService("(objectClass=org.ops4j.pax.exam.regression.pde.HelloService)",
+        framework.callService("(objectClass=org.ops4j.pax.exam.sample9.pde.HelloService)",
             "getMessage");
 
         Thread.sleep(3000);

@@ -24,7 +24,6 @@ import static org.ops4j.pax.exam.CoreOptions.options;
 
 import javax.inject.Inject;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -49,7 +48,6 @@ public class ReferenceJarTest {
     }
 
     @Test
-    @Ignore // pde bundle is outdated (Bundle-RequiredExecutionEnvironment: JavaSE-1.6)
     public void getHelloService() {
         Object service = ServiceLookup.getService(bc,
             "org.ops4j.pax.exam.regression.pde.HelloService");

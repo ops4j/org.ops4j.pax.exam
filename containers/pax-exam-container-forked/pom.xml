@@ -148,6 +148,7 @@
                                     <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                     <execution>
