@@ -24,7 +24,6 @@ import static org.ops4j.pax.exam.regression.karaf.RegressionConfiguration.regres
 
 import javax.inject.Inject;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -43,17 +42,17 @@ public class UseFeatureInsteadOfDeployFolderTest extends TestBase {
     public Option[] config() {
         return options(
             regressionDefaults(unpackDirectory()),
-            mavenBundle("org.slf4j", "slf4j-api", "1.6.1"));
+            mavenBundle("org.apache.sling", "org.apache.sling.commons.messaging", "1.0.2")
+        );
     }
 
-    @Ignore
     @Test
     public void test() throws Exception {
         for (Bundle b : bc.getBundles()) {
-            if (b.getSymbolicName().equals("slf4j.api")) {
+            if (b.getSymbolicName().equals("org.apache.sling.commons.messaging")) {
                 return;
             }
         }
-        fail("slf4j-api is not provisioned");
+        fail("bundle org.apache.sling.commons.messaging is not provisioned");
     }
 }
