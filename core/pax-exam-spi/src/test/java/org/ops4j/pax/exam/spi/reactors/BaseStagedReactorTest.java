@@ -48,7 +48,7 @@ public abstract class BaseStagedReactorTest {
         assertThat(reactor.getTargets().size(), is(0));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = NullPointerException.class)
     public void testInvokeNull() throws Exception {
         List<TestContainer> containers = new ArrayList<TestContainer>();
         List<TestProbeBuilder> providers = new ArrayList<TestProbeBuilder>();

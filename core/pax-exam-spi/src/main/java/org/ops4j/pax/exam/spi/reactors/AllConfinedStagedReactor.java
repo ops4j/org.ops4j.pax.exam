@@ -18,6 +18,7 @@ package org.ops4j.pax.exam.spi.reactors;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.ops4j.pax.exam.TestAddress;
@@ -69,7 +70,7 @@ public class AllConfinedStagedReactor implements StagedExamReactor {
     }
 
     public void invoke(TestAddress address) throws Exception {
-        assert (address != null) : "TestAddress must not be null.";
+        Objects.requireNonNull(address, "TestAddress must not be null.");
         // you can directly invoke:
         TestContainer container = map.get(address);
         if (container == null) {

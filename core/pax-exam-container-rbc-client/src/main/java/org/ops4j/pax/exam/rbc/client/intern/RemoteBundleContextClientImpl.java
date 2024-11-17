@@ -28,6 +28,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Objects;
 import java.util.Stack;
 
 import org.ops4j.io.StreamUtils;
@@ -79,7 +80,7 @@ public class RemoteBundleContextClientImpl implements RemoteBundleContextClient 
      */
     public RemoteBundleContextClientImpl(final String name, final Integer registry,
         final RelativeTimeout timeout) {
-        assert registry != null : "registry should not be null";
+        Objects.requireNonNull(registry, "Registry must not be null.");
 
         this.registry = registry;
         this.name = name;

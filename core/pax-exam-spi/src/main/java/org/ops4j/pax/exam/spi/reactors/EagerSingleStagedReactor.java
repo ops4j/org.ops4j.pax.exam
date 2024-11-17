@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.ops4j.pax.exam.TestAddress;
@@ -99,7 +100,7 @@ public class EagerSingleStagedReactor implements StagedExamReactor {
     }
 
     public void invoke(TestAddress address) throws Exception {
-        assert (address != null) : "TestAddress must not be null.";
+        Objects.requireNonNull(address, "TestAddress must not be null.");
 
         TestContainer testContainer = map.get(address);
         if (testContainer == null) {

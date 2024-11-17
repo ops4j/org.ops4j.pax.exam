@@ -17,6 +17,8 @@
  */
 package org.ops4j.pax.exam.container.remote.options;
 
+import java.util.Objects;
+
 import org.ops4j.pax.exam.Option;
 
 /**
@@ -29,8 +31,8 @@ public class RBCPortOption implements Option {
     private String host;
 
     public RBCPortOption(String host, Integer port) {
-        assert host != null : "Host should never be null.";
-        assert port != null : "Port should never be null.";
+        Objects.requireNonNull(host, "Host must not be be null.");
+        Objects.requireNonNull(port, "Port must not be be null.");
 
         this.host = host;
         this.port = port;

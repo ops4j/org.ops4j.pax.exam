@@ -15,6 +15,8 @@
  */
 package org.ops4j.pax.exam.container.remote;
 
+import java.util.Objects;
+
 import static org.ops4j.pax.exam.OptionUtils.filter;
 
 import org.ops4j.pax.exam.Option;
@@ -35,8 +37,8 @@ public class Parser {
     public Parser(Option[] options) {
         extractArguments(filter(RBCPortOption.class, options));
         extractArguments(filter(RBCLookupTimeoutOption.class, options));
-        assert port != null : "Port should never be null.";
-        assert host != null : "Host should never be null.";
+        Objects.requireNonNull(host, "Host must not be be null.");
+        Objects.requireNonNull(port, "Port must not be be null.");
 
     }
 

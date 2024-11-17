@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
  */
 public class ParserTest {
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = NullPointerException.class)
     public void testDefaults() {
         Option[] options = CoreOptions.options();
         new Parser(options);
