@@ -46,7 +46,7 @@ public class RBCRemoteTargetOptions {
      * Creates a {@link org.ops4j.pax.exam.container.remote.options.RBCLookupTimeoutOption}.
      * 
      * @param host
-     *            to use for rmi rgistry
+     *            to use for rmi registry
      * @param port
      *            port where the rbc server is listening at
      * 

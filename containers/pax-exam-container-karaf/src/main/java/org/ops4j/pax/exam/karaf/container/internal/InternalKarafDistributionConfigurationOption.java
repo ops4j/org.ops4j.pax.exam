@@ -25,7 +25,7 @@ import org.ops4j.pax.exam.karaf.options.KarafDistributionConfigurationOption;
 
 /**
  * Extends the {@link KarafDistributionConfigurationOption} to add functionality to store those values also in a
- * distribution.info file in the distirbution.
+ * distribution.info file in the distribution.
  */
 public class InternalKarafDistributionConfigurationOption extends KarafDistributionConfigurationOption {
 

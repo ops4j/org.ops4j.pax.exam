@@ -104,7 +104,7 @@ public class InternalRunner {
     }
 
     /**
-     * Create helper thread to safely shutdown the external framework process
+     * Create helper thread to safely shut down the external framework process
      * 
      * @param process
      *            framework process

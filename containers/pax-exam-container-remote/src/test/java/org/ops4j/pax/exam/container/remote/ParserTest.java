@@ -23,7 +23,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Test for this modules Options Parser implementation.
+ * Test for this module's Options Parser implementation.
  */
 public class ParserTest {
 

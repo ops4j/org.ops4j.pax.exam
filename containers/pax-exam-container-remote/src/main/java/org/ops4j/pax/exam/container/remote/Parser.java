@@ -63,7 +63,7 @@ public class Parser {
         return port;
     }
 
-    public long getRMILookupTimpout() {
+    public long getRMILookupTimeout() {
         return timeout;
     }
 
