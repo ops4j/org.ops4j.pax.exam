@@ -57,11 +57,11 @@
     </profiles>
 
     <scm>
-        <connection>scm:git:https://github.com/ops4j/org.ops4j.pax.exam2</connection>
-        <developerConnection>scm:git:https://github.com/ops4j/org.ops4j.pax.exam2</developerConnection>
-        <url>https://github.com/ops4j/org.ops4j.pax.exam2</url>
-      <tag>HEAD</tag>
-  </scm>
+        <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.exam.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/ops4j/org.ops4j.pax.exam.git</developerConnection>
+        <url>scm:git:https://github.com/ops4j/org.ops4j.pax.exam.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
 
     <build>

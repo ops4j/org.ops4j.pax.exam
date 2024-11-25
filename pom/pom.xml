@@ -734,11 +734,11 @@
         </license>
     </licenses>
 
-    <url>http://team.ops4j.org/wiki/display/paxexam/</url>
+    <url>https://github.com/ops4j/org.ops4j.pax.exam</url>
 
     <issueManagement>
-        <system>jira</system>
-        <url>http://team.ops4j.org/browse/PAXEXAM</url>
+        <system>GitHub</system>
+        <url>https://github.com/ops4j/org.ops4j.pax.exam/issues</url>
     </issueManagement>
 
     <developers>
