@@ -131,7 +131,7 @@ public class InternalRunner {
                     // ignore if already shutting down
                 }
             }
-        }, "Pax-Runner shutdown hook");
+        }, "Karaf InternalRunner Shutdown Hook");
     }
 
 }
