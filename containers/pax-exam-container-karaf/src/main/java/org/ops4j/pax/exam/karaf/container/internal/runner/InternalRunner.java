@@ -28,7 +28,7 @@ import org.ops4j.io.Pipe;
 public class InternalRunner {
 
     private Process frameworkProcess;
-    private Object frameworkProcessMonitor = new Object();
+    private final Object frameworkProcessMonitor = new Object();
     private Thread shutdownHook;
     private final Object shutdownHookMonitor = new Object();
 
