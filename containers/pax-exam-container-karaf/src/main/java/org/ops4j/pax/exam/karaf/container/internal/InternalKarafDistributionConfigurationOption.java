@@ -43,7 +43,7 @@ public class InternalKarafDistributionConfigurationOption extends KarafDistribut
     @Override
     public String getKarafVersion() {
         String internalVersion = super.getKarafVersion();
-        if (internalVersion != null && internalVersion.length() != 0) {
+        if (internalVersion != null && !internalVersion.isEmpty()) {
             return internalVersion;
         }
         if (!distributionInfo.exists()) {
@@ -51,7 +51,7 @@ public class InternalKarafDistributionConfigurationOption extends KarafDistribut
                     "Either distribution.info or the property itself has to define a karaf version.");
         }
         String retrieveProperty = retrieveProperty(KARAF_VERSION);
-        if (retrieveProperty == null || retrieveProperty.length() == 0) {
+        if (retrieveProperty == null || retrieveProperty.isEmpty()) {
             throw new IllegalStateException(
                     "Either distribution.info or the property itself has to define a karaf version.");
         }
@@ -61,7 +61,7 @@ public class InternalKarafDistributionConfigurationOption extends KarafDistribut
     @Override
     public String getName() {
         String internalName = super.getName();
-        if (internalName != null && internalName.length() != 0) {
+        if (internalName != null && !internalName.isEmpty()) {
             return internalName;
         }
         if (!distributionInfo.exists()) {
@@ -69,7 +69,7 @@ public class InternalKarafDistributionConfigurationOption extends KarafDistribut
                     "Either distribution.info or the property itself has to define a name for the distribution..");
         }
         String retrieveProperty = retrieveProperty(NAME);
-        if (retrieveProperty == null || retrieveProperty.length() == 0) {
+        if (retrieveProperty == null || retrieveProperty.isEmpty()) {
             throw new IllegalStateException(
                     "Either distribution.info or the property itself has to define a name for the distribution..");
         }
@@ -77,16 +77,10 @@ public class InternalKarafDistributionConfigurationOption extends KarafDistribut
     }
 
     private String retrieveProperty(String key) {
-        try {
-            FileInputStream fileInputStream = new FileInputStream(distributionInfo);
-            try {
-                Properties props = new Properties();
-                props.load(fileInputStream);
-                return props.getProperty(key);
-            } 
-            finally {
-                fileInputStream.close();
-            }
+        try (FileInputStream fileInputStream = new FileInputStream(distributionInfo)) {
+            Properties props = new Properties();
+            props.load(fileInputStream);
+            return props.getProperty(key);
         }
         // CHECKSTYLE:SKIP
         catch (Exception e) {
