@@ -1,2 +1,2 @@
-= TestNG Driver
-:navtitle: TestNG
+= Pax Exam TestNG Driver
+:navtitle: TestNG Driver

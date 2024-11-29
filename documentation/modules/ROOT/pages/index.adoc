@@ -1,2 +1,45 @@
 = Pax Exam
 :navtitle: Pax Exam
+
+Pax Exam is an in-container testing framework for https://www.osgi.org[OSGi].
+
+* Pax Exam lets you take control of the OSGi framework, the test framework (e.g. JUnit) and your system under test at the same time.
+* Pax Exam is also able to bootstrap an https://karaf.apache.org[Apache Karaf] container allowing you to directly execute commands, deploy features, etc.
+* Pax Exam has a test driver and a test container. The driver launches the OSGi framework and the system under test. It builds on-the-fly bundles from your test cases and injects them into the container. The driver is a plain old Java application and does not itself require an OSGi framework.
+* The test container comes in two flavours: The Native Container launches an embedded OSGi framework in the test driver VM. With the Forked Container, the system under test runs in a separate Java virtual machine under remote control from the test driver.
+* Test containers support different strategies for restarting or reusing the running OSGi framework for each test.
+* With the Pax Exam JUnit runner, you simply need to add some special annotations and a configuration method to a JUnit class to run your OSGi tests. Thanks to this runner, any JUnit integration (e.g. in Eclipse or Maven Surefire) works with Pax Exam out of the box.
+* Pax Exam itself is distributed as Maven artifacts and lets you provision Maven bundles to your OSGi framework directly from local or remote Maven repositories.
+* Pax Exam supports all major OSGi frameworks (https://eclipse.dev/equinox/[Equinox], https://felix.apache.org[Felix], https://www.knopflerfish.org[Knopflerfish]).
+
+== Framework
+In the context of Pax Exam, the term framework usually refers to the OSGi framework running the system under test.
+
+== System under test
+The system under test is the collection of your application and library bundles.
+Pax Exam aims at executing black box tests, but in fact the box (i.e. the container) is slightly grey, as Pax Exam adds some bundles of its own and the probe.
+
+== Test Container
+The test container is a thin wrapper around the framework, the system under test and the probe, adding the ability to communicate with the driver and the
+outside world in general.
+
+== Reactor
+The reactor manages the collection of all tests to be executed in one or more different containers. The reactor starts and stops the required containers and
+provisions bundles and probes to the containers.
+
+== Driver
+The driver is the entry point into Pax Exam. It evaluates configuration options and creates a reactor based on these options. The driver receives the test
+results and handles them in an implementation dependent way.
+
+Pax Exam includes different drivers:
+
+* The JUnit driver integrates Pax Exam with https://junit.org[JUnit].
+* The TestNG driver integrates Pax Exam with https://testng.org[TestNG].
+
+== Probe
+The probe is a synthetic artifact which Pax Exam adds to the system under test.
+Pax Exam creates the probe on the fly with the help of https://github.com/ops4j/org.ops4j.pax.tinybundles[Tinybundles]. The probe contains the current test class and all classes and resources found under the same root.
+
+== Configuration
+The configuration determines the set of bundles provisioned to the container, and some system and environment properties.
+Use one or more methods annotated by `@Configuration` with return type `Option[]`.

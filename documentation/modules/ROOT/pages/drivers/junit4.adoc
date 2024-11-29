@@ -1,2 +1,2 @@
-= JUnit Driver
-:navtitle: JUnit
+= Pax Exam JUnit Driver
+:navtitle: JUnit Driver

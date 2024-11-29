@@ -1,2 +1,2 @@
-= Native Test Container
-:navtitle: Native
+= Pax Exam Native Container
+:navtitle: Native Container

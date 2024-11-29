@@ -1,0 +1,23 @@
+= Pax Exam Reactor
+:navtitle: Reactor
+
+== Reactor Strategies
+
+A reactor strategy defines a factory for creating reactors. The reactor strategy determines whether the test container will be stopped and restarted between tests.
+The reactor strategy is defined by an annotation on the test class.
+
+[source,java]
+----
+@RunWith(PaxExam.class)
+@ExamReactorStrategy(PerMethod.class)
+public class ExplodedReferenceTest {
+
+}
+----
+
+=== Per Method
+With the _Per Method_ strategy, the test container is started and stopped before and after each individual test method.
+PerMethod is the default strategy.
+
+=== Per Class
+With the _Per Class_ strategy, the test container is started and stopped before and after running all tests of a given test class. Thus, subsequent test methods are not completely isolated from any side effects of previous methods of the same test class.

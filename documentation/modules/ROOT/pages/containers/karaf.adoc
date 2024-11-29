@@ -1,2 +1,2 @@
-= Karaf Test Container
-:navtitle: Karaf
+= Pax Exam Karaf Container
+:navtitle: Karaf Container
