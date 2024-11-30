@@ -19,6 +19,13 @@
     <name>OPS4J Pax Exam Regression - Native Container + TestNG</name>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- For sane logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
