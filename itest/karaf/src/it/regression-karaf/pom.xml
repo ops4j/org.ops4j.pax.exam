@@ -12,6 +12,7 @@
         <relativePath>../../../../../pom</relativePath>
     </parent>
 
+    <groupId>org.ops4j.pax.exam.itest</groupId>
     <artifactId>regression-karaf</artifactId>
     <packaging>jar</packaging>
 
