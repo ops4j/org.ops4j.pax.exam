@@ -24,6 +24,7 @@
             <!-- profile needs to be activated during release:prepare for versioning of modules -->
             <id>release</id>
             <modules>
+                <module>src/it/regression-maven-plugin</module>
                 <module>src/it/regression-multi</module>
                 <module>src/it/regression-plumbing</module>
                 <module>src/it/regression-testng</module>
