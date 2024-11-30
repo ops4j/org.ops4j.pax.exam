@@ -250,6 +250,18 @@
                 <version>3.21.0</version>
             </dependency>
 
+            <!-- bnd -->
+            <dependency>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>biz.aQute.bndlib</artifactId>
+                <version>6.4.1</version>
+            </dependency>
+            <dependency>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>biz.aQute.bnd.util</artifactId>
+                <version>6.4.1</version>
+            </dependency>
+
             <!-- Maven -->
             <dependency>
                 <groupId>org.apache.maven</groupId>
