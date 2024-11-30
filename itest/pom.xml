@@ -40,16 +40,6 @@
             </modules>
         </profile>
 
-        <profile>
-            <id>web</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <modules>
-                <module>web</module>
-            </modules>
-        </profile>
-
     </profiles>
 
 </project>
