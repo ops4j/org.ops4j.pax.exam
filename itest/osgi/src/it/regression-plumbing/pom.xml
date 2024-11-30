@@ -21,6 +21,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-junit4</artifactId>
             <version>${project.version}</version>
