@@ -766,6 +766,16 @@
             <timezone>UTC+1</timezone>
         </developer>
         <developer>
+            <id>olli</id>
+            <name>Oliver Lietz</name>
+            <email>info@oliverlietz.de</email>
+            <organization />
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>UTC+1</timezone>
+        </developer>
+        <developer>
             <id>mcculls</id>
             <name>Stuart McCulloch</name>
             <email>stuart.mcculloch@jayway.net</email>
