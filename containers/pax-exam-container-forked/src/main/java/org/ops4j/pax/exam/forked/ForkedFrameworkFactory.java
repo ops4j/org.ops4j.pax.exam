@@ -17,6 +17,10 @@
  */
 package org.ops4j.pax.exam.forked;
 
+import static org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT;
+import static org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT_RANGE_LOWERBOUND;
+import static org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT_RANGE_UPPERBOUND;
+
 import java.io.File;
 import java.net.InetAddress;
 import java.net.URISyntaxException;
@@ -104,9 +108,7 @@ public class ForkedFrameworkFactory {
     public RemoteFramework fork(List<String> vmArgs, Map<String, String> systemProperties,
         Map<String, Object> frameworkProperties, List<String> beforeFrameworkClasspath,
         List<String> afterFrameworkClasspath) {
-        // TODO make port range configurable
-        FreePort freePort = new FreePort(21000, 21099);
-        port = freePort.getPort();
+        port = getPort();
         LOG.debug("using RMI registry at port {}", port);
 
         String rmiName = "ExamRemoteFramework-" + UUID.randomUUID().toString();
@@ -129,6 +131,18 @@ public class ForkedFrameworkFactory {
         }
         catch (RemoteException | ExecutionException | URISyntaxException exc) {
             throw new TestContainerException(exc);
+        }
+    }
+
+    protected int getPort() {
+        String configuredPort = System.getProperty(EXAM_FORKED_INVOKER_PORT);
+        if (configuredPort != null) {
+            return Integer.parseInt(configuredPort);
+        } else {
+            // fails if user configure a wrong port value
+            int lowerBound = Integer.parseInt(System.getProperty(EXAM_FORKED_INVOKER_PORT_RANGE_LOWERBOUND, "21000"));
+            int upperBound = Integer.parseInt(System.getProperty(EXAM_FORKED_INVOKER_PORT_RANGE_UPPERBOUND, "21099"));
+            return new FreePort(lowerBound, upperBound).getPort();
         }
     }
 

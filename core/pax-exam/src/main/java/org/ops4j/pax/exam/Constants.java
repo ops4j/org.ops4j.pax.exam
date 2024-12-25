@@ -19,14 +19,14 @@ package org.ops4j.pax.exam;
 
 /**
  * Pax Exam related constants.
- * 
+ *
  * @author Alin Dreghiciu (adreghiciu@gmail.com)
  * @author Harald Wellmann
  * @since 0.5.0, April 22, 2009
  */
 public class Constants {
-    
-    
+
+
     /**
      * The start level at which Pax Exam system bundles are to be started.
      */
@@ -121,12 +121,42 @@ public class Constants {
      * Do not provision any logging system and leave it to the user.
      */
     public static final String EXAM_LOGGING_NONE = "none";
-    
+
     /**
      * Should Pax Exam fail the test if any of the provisioned bundles is unresolved?
      * Values: true | false.
      */
     public static final String EXAM_FAIL_ON_UNRESOLVED_KEY = "pax.exam.osgi.unresolved.fail";
+
+    /**
+     * Port for socket-based communication with remote invoker.
+     */
+    public static final String EXAM_INVOKER_PORT = "pax.exam.invoker.port";
+
+    /**
+     * Lower bound port range for socket-based communication with remote invoker.
+     */
+    public static final String EXAM_INVOKER_PORT_RANGE_LOWERBOUND = "pax.exam.invoker.port.range.lowerbound";
+
+    /**
+     * Upper bound port range for socket-based communication with remote invoker.
+     */
+    public static final String EXAM_INVOKER_PORT_RANGE_UPPERBOUND = "pax.exam.invoker.port.range.upperbound";
+
+    /**
+     * Port for socket-based communication with remote invoker.
+     */
+    public static final String EXAM_FORKED_INVOKER_PORT = "pax.exam.forked.invoker.port";
+
+    /**
+     * Lower bound port range for socket-based communication with forked remote invoker.
+     */
+    public static final String EXAM_FORKED_INVOKER_PORT_RANGE_LOWERBOUND = "pax.exam.forked.invoker.port.range.lowerbound";
+
+    /**
+     * Upper bound port range for socket-based communication with forked remote invoker.
+     */
+    public static final String EXAM_FORKED_INVOKER_PORT_RANGE_UPPERBOUND = "pax.exam.forked.invoker.port.range.upperbound";
 
     /** Hidden utility class constructor. */
     private Constants() {

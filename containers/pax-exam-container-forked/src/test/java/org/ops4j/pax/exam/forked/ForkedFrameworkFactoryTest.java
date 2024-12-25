@@ -30,7 +30,9 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -64,6 +66,7 @@ public class ForkedFrameworkFactoryTest {
     public void afterTest() throws IOException {
         // FileUtils.deleteDirectory(storage);
         storage = null;
+        System.clearProperty(org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT); // set implicitly
     }
 
     @Test
@@ -147,6 +150,24 @@ public class ForkedFrameworkFactoryTest {
         forkedFactory.fork(Collections.<String> emptyList(),
             Collections.<String, String> emptyMap(), frameworkProperties, null,
             bootClasspath);
+    }
+
+    @Test()
+    public void verifyPortConfiguration() throws Exception {
+        ForkedFrameworkFactory frameworkFactory = new ForkedFrameworkFactory(null);
+
+        new SystemPropertyRunnable(org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT, "15000") {
+            @Override
+            protected void doRun() {
+                Assert.assertThat(frameworkFactory.getPort(), CoreMatchers.equalTo(15000));
+            }
+        }.run();
+        new SystemPropertyRunnable(org.ops4j.pax.exam.Constants.EXAM_FORKED_INVOKER_PORT_RANGE_LOWERBOUND, "15000") {
+            @Override
+            protected void doRun() {
+                Assert.assertThat(frameworkFactory.getPort(), CoreMatchers.equalTo(15000));
+            }
+        }.run();
     }
 
     private File generateBundle() throws IOException {
