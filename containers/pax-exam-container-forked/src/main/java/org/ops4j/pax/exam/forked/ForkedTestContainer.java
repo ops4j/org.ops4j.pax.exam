@@ -55,6 +55,7 @@ import org.ops4j.pax.exam.options.SystemPackageOption;
 import org.ops4j.pax.exam.options.SystemPropertyOption;
 import org.ops4j.pax.exam.options.UrlReference;
 import org.ops4j.pax.exam.options.ValueOption;
+import org.ops4j.pax.exam.options.extra.EnvironmentOption;
 import org.ops4j.pax.exam.options.extra.RepositoryOption;
 import org.ops4j.pax.exam.options.extra.VMOption;
 import org.ops4j.pax.swissbox.framework.RemoteFramework;
@@ -159,8 +160,15 @@ public class ForkedTestContainer implements TestContainer {
                 }
             }
 
+            List<String> environment = new ArrayList<>();
+            EnvironmentOption[] environmentOptions = system.getOptions(EnvironmentOption.class);
+            for (EnvironmentOption environmentOption : environmentOptions) {
+                environment.add(environmentOption.getEnvironment());
+            }
+            String[] env = environment.toArray(new String[environment.size()]);
+
             remoteFramework = frameworkFactory.fork(vmArgs, systemProperties, frameworkProperties,
-                beforeFrameworkClasspath, afterFrameworkClasspath);
+                beforeFrameworkClasspath, afterFrameworkClasspath, env);
             remoteFramework.init();
             installAndStartBundles();
         }

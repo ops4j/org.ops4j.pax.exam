@@ -169,6 +169,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <!--
+                            The environment variable 'PROPAGATE' is needed for the following test cases:
+                            ForkedTestContainerFactoryTest.withEnvironmentPassthrough
+                            ForkedTestContainerFactoryTest.withEnvironmentOverride
+                            ForkedTestContainerFactoryTest.withoutEnvironmentPassthrough
+                         -->
+                        <PROPAGATE>test</PROPAGATE>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

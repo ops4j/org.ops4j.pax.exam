@@ -103,7 +103,7 @@ public class ForkedFrameworkFactory {
      */
     public RemoteFramework fork(List<String> vmArgs, Map<String, String> systemProperties,
         Map<String, Object> frameworkProperties, List<String> beforeFrameworkClasspath,
-        List<String> afterFrameworkClasspath) {
+        List<String> afterFrameworkClasspath, String[] env) {
         // TODO make port range configurable
         FreePort freePort = new FreePort(21000, 21099);
         port = freePort.getPort();
@@ -124,7 +124,7 @@ public class ForkedFrameworkFactory {
             String[] args = buildFrameworkProperties(frameworkProperties);
             javaRunner = new ExamJavaRunner(false);
             javaRunner.exec(vmOptions, buildClasspath(beforeFrameworkClasspath, afterFrameworkClasspath),
-                RemoteFrameworkImpl.class.getName(), args, getJavaHome(), null);
+                RemoteFrameworkImpl.class.getName(), args, getJavaHome(), null, env);
             return findRemoteFramework(port, rmiName);
         }
         catch (RemoteException | ExecutionException | URISyntaxException exc) {
@@ -147,7 +147,7 @@ public class ForkedFrameworkFactory {
      */
     public RemoteFramework fork(List<String> vmArgs, Map<String, String> systemProperties,
         Map<String, Object> frameworkProperties) {
-        return fork(vmArgs, systemProperties, frameworkProperties, null, null);
+        return fork(vmArgs, systemProperties, frameworkProperties, null, null, new String[0]);
     }
 
     private String[] buildSystemProperties(List<String> vmArgs, Map<String, String> systemProperties) {

@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsInstanceOf;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Assert;
 import org.junit.Test;
 import org.ops4j.pax.exam.CoreOptions;
@@ -36,6 +39,7 @@ import org.ops4j.pax.exam.TestContainer;
 import org.ops4j.pax.exam.TestContainerException;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
 import org.ops4j.pax.exam.options.UrlReference;
+import org.ops4j.pax.exam.options.extra.EnvironmentOption;
 import org.ops4j.pax.exam.spi.PaxExamRuntime;
 import org.ops4j.pax.tinybundles.TinyBundles;
 import org.osgi.framework.BundleActivator;
@@ -150,6 +154,129 @@ public class ForkedTestContainerFactoryTest {
 
             if (clazz == null) {
                 throw new IllegalStateException("Class '" + className + "' not loaded");
+            }
+        }
+
+        @Override
+        public void stop(BundleContext bc) throws Exception {}
+    }
+
+    @Test
+    public void withEnvironmentPassthrough() throws IOException {
+        // This test only works if the environment variable 'PROPAGATE' is set externally to 'test'
+        Assert.assertTrue(System.getenv().containsKey("PROPAGATE"));
+        Assert.assertThat(System.getenv().get("PROPAGATE"), IsEqual.equalTo("test"));
+
+        List<Option> options = new ArrayList<>();
+        // Configure the EnvironmentOption to passthrough the 'PROPAGATE' environment variable
+        options.add(new EnvironmentOption("PROPAGATE"));
+        options.add(CoreOptions.frameworkProperty("test.expected.variable").value("PROPAGATE"));
+        options.add(CoreOptions.frameworkProperty("test.expected.value").value("test"));
+
+        forkWithEnvironment(options);
+    }
+
+    @Test
+    public void withEnvironmentOverride() throws IOException {
+        // This test only works if the environment variable 'PROPAGATE' is set externally to 'test'
+        Assert.assertTrue(System.getenv().containsKey("PROPAGATE"));
+        Assert.assertThat(System.getenv().get("PROPAGATE"), IsEqual.equalTo("test"));
+
+        List<Option> options = new ArrayList<>();
+        // Configure the EnvironmentOption to override the value of environment variable PROPAGATE
+        options.add(new EnvironmentOption("PROPAGATE=testOverride"));
+        options.add(CoreOptions.frameworkProperty("test.expected.variable").value("PROPAGATE"));
+        options.add(CoreOptions.frameworkProperty("test.expected.value").value("testOverride"));
+
+        forkWithEnvironment(options);
+    }
+
+    @Test
+    public void withEnvironmentDefinition() throws IOException {
+        List<Option> options = new ArrayList<>();
+        // Configure the EnvironmentOption to define environment variable OTHER
+        options.add(new EnvironmentOption("OTHER=value"));
+        options.add(CoreOptions.frameworkProperty("test.expected.variable").value("OTHER"));
+        options.add(CoreOptions.frameworkProperty("test.expected.value").value("value"));
+
+        forkWithEnvironment(options);
+    }
+
+    @Test
+    public void withoutEnvironmentPassthrough() throws IOException {
+        // This test only works if the environment variable 'PROPAGATE' is set externally to 'test'
+        Assert.assertTrue(System.getenv().containsKey("PROPAGATE"));
+        Assert.assertThat(System.getenv().get("PROPAGATE"), IsEqual.equalTo("test"));
+
+        List<Option> options = new ArrayList<>();
+        // Do not configure a value or pass through of environment variable PROPAGATE
+        options.add(CoreOptions.frameworkProperty("test.expected.variable").value("PROPAGATE"));
+        options.add(CoreOptions.frameworkProperty("test.expected.value").value("test"));
+
+        // The fork should fail as the expected environment variable is not found
+        TestContainerException testContainerException = Assert.assertThrows(TestContainerException.class, () -> forkWithEnvironment(options));
+
+        Throwable bundleException = testContainerException.getCause();
+        Assert.assertThat(bundleException, IsInstanceOf.instanceOf(BundleException.class));
+
+        Throwable illegalStateException = bundleException.getCause();
+        Assert.assertThat(illegalStateException, IsInstanceOf.instanceOf(IllegalStateException.class));
+
+        // Verify the reason of the failure
+        Assert.assertThat(illegalStateException.getMessage(), StringStartsWith.startsWith("Unable to find environment variable 'PROPAGATE' with expected value 'test'"));
+    }
+
+    public void forkWithEnvironment(List<Option> options) throws IOException {
+        Option[] opts = options.toArray(new Option[options.size()]);
+
+        ExamSystem system = PaxExamRuntime.createServerSystem(opts);
+        ForkedTestContainerFactory factory = new ForkedTestContainerFactory();
+        TestContainer[] containers = factory.create(system);
+
+        Assert.assertNotNull(containers);
+        Assert.assertNotNull(containers[0]);
+
+        ForkedTestContainer container = (ForkedTestContainer) containers[0];
+        container.start();
+        try {
+            // Prepare a test bundle with EnvironmentTestActivator as activator
+            File testBundle = generateEnvironmentBundle();
+
+            // Install the test bundle, the start on EnvironmentTestActivator will fail if the configured environment
+            // variable does not have the expected value
+            container.install(new FileInputStream(testBundle));
+        } finally {
+            container.stop();
+        }
+    }
+
+    private File generateEnvironmentBundle() throws IOException {
+        InputStream stream = TinyBundles.bundle().addClass(EnvironmentTestActivator.class)
+                .setHeader(Constants.BUNDLE_MANIFESTVERSION, "2")
+                .setHeader(Constants.BUNDLE_SYMBOLICNAME, "environment.test.generated")
+                .setHeader(Constants.BUNDLE_ACTIVATOR, EnvironmentTestActivator.class.getName())
+                .setHeader(Constants.IMPORT_PACKAGE, "org.osgi.framework")
+                .build(rawBuilder());
+
+        File bundle = new File("target/bundles/environment-generated.jar");
+        FileUtils.copyInputStreamToFile(stream, bundle);
+        return bundle;
+    }
+
+    public static class EnvironmentTestActivator implements BundleActivator {
+
+        @Override
+        public void start(BundleContext bc) throws Exception {
+            final String variable = bc.getProperty("test.expected.variable");
+            final String expectedValue = bc.getProperty("test.expected.value");
+            if (variable == null || expectedValue == null) {
+                throw new IllegalStateException("Unable to retrieve value for framework property " +
+                        "'test.expected.variable' and/or 'test.expected.value'");
+            }
+            if (!System.getenv().containsKey(variable) || !expectedValue.equals(System.getenv().get(variable))) {
+                throw new IllegalStateException(
+                        "Unable to find environment variable '" + variable +
+                                "' with expected value '" + expectedValue + "' in: " + System.getenv());
             }
         }
 
