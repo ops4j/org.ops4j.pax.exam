@@ -20,8 +20,10 @@ package org.ops4j.pax.exam;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.ops4j.exec.CommandLineBuilder;
 import org.ops4j.exec.ExecutionException;
@@ -134,13 +136,59 @@ public class ExamJavaRunner implements StoppableJavaRunner, ProcessProvider {
     }
 
     private void setEnv(final String[] envOptions, ProcessBuilder pb) {
-        HashSet<String> envSet = new HashSet<String>(Arrays.asList(envOptions));
-        Map<String, String> env = pb.environment();
-        HashSet<String> toRemove = new HashSet<String>(env.keySet());
-        toRemove.removeAll(envSet);
-        for (String key : toRemove) {
-            env.remove(key);
+        final Map<String, String> envMap = toKeyValueMap(envOptions);
+
+        final Map<String, String> env = pb.environment();
+
+        // Remove all items from the ProcessBuilder's environment,
+        // that are not explicitly referenced in the envMap's keyset
+        final Set<String> toRemove = new HashSet<String>(env.keySet());
+        toRemove.removeAll(envMap.keySet());
+        env.keySet().removeAll(toRemove);
+
+        // Any supplied values should be applied, possibly overriding an initial value from the ProcessBuilder.
+        envMap.entrySet().stream()
+                .filter(entry -> entry.getValue() != null)
+                .forEach(entry -> env.put(entry.getKey(), entry.getValue()));
+    }
+
+    /**
+     * Converts an array of strings in the format "key=value" into a map of key-value pairs.
+     * If a string does not contain an '=' character, the entire string is treated as the key,
+     * and the corresponding value is set to {@code null}.
+     *
+     * @param envOptions an array of strings, each representing an environment option in the
+     *                   format "key=value". Strings without an '=' will have {@code null} as the value.
+     * @return a {@code Map<String, String>} where each key-value pair is derived from the input array.
+     *         Keys are extracted from the portion of the string before the first '=' character,
+     *         and values are extracted from the portion after the '=' character. If no '=' is
+     *         present, the value is set to {@code null}.
+     */
+    private static Map<String, String> toKeyValueMap(String[] envOptions) {
+        final Map<String, String> envMap = new HashMap<>();
+        for (String envOption : envOptions) {
+            if (envOption == null || envOption.isEmpty()) {
+                throw new IllegalArgumentException("Null or empty entry in envOptions");
+            }
+            final int equalsPosition = envOption.indexOf('=');
+            final String key;
+            final String value;
+            if (equalsPosition < 0) {
+                key = envOption.trim();
+                value = null;
+            } else {
+                key = envOption.substring(0, equalsPosition).trim();
+                value = envOption.substring(equalsPosition + 1).trim();
+            }
+            if (key.isEmpty()) {
+                throw new IllegalArgumentException("Input " + envOption + " resulted in an empty key");
+            }
+            if (envMap.containsKey(key)) {
+                throw new IllegalArgumentException("Duplicate key found: " + key);
+            }
+            envMap.put(key, value);
         }
+        return envMap;
     }
 
     /**
