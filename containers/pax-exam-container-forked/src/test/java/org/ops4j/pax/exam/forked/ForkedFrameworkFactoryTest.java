@@ -66,7 +66,6 @@ public class ForkedFrameworkFactoryTest {
     public void afterTest() throws IOException {
         // FileUtils.deleteDirectory(storage);
         storage = null;
-        System.clearProperty(org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT); // set implicitly
     }
 
     @Test

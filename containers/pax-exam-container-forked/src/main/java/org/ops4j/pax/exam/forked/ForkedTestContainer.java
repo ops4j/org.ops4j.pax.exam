@@ -18,9 +18,6 @@
 package org.ops4j.pax.exam.forked;
 
 import static org.ops4j.pax.exam.Constants.EXAM_FAIL_ON_UNRESOLVED_KEY;
-import static org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT;
-import static org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT_RANGE_LOWERBOUND;
-import static org.ops4j.pax.exam.Constants.EXAM_INVOKER_PORT_RANGE_UPPERBOUND;
 import static org.ops4j.pax.exam.Constants.START_LEVEL_TEST_BUNDLE;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import static org.osgi.framework.Constants.FRAMEWORK_BOOTDELEGATION;
@@ -41,7 +38,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.ops4j.io.StreamUtils;
-import org.ops4j.net.FreePort;
 import org.ops4j.pax.exam.ConfigurationManager;
 import org.ops4j.pax.exam.ExamSystem;
 import org.ops4j.pax.exam.Option;
@@ -139,10 +135,8 @@ public class ForkedTestContainer implements TestContainer {
     @Override
     public TestContainer start() {
         try {
-            port = getPort();
             system = system.fork(new Option[] {
-                systemProperty("java.protocol.handler.pkgs").value("org.ops4j.pax.url"),
-                systemProperty(EXAM_INVOKER_PORT).value(Integer.toString(port))
+                systemProperty("java.protocol.handler.pkgs").value("org.ops4j.pax.url")
                 });
             List<String> vmArgs = createVmArguments();
             Map<String, String> systemProperties = createSystemProperties();
@@ -176,18 +170,6 @@ public class ForkedTestContainer implements TestContainer {
             throw new TestContainerException(exc);
         }
         return this;
-    }
-
-    protected int getPort() {
-        String configuredPort = System.getProperty(EXAM_INVOKER_PORT);
-        if (configuredPort != null) {
-            return Integer.parseInt(configuredPort);
-        } else {
-            // fails if user configure a wrong port value
-            int lowerBound = Integer.parseInt(System.getProperty(EXAM_INVOKER_PORT_RANGE_LOWERBOUND, "20000"));
-            int upperBound = Integer.parseInt(System.getProperty(EXAM_INVOKER_PORT_RANGE_UPPERBOUND, "21000"));
-            return new FreePort(lowerBound, upperBound).getPort();
-        }
     }
 
     @Override
