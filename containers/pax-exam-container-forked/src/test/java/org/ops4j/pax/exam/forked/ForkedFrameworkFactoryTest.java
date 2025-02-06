@@ -45,6 +45,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.FrameworkFactory;
 
+import static org.ops4j.pax.exam.util.NetUtils.findFreePort;
 import static org.ops4j.pax.tinybundles.TinyBundles.rawBuilder;
 
 public class ForkedFrameworkFactoryTest {
@@ -74,10 +75,13 @@ public class ForkedFrameworkFactoryTest {
 
         ForkedFrameworkFactory forkedFactory = new ForkedFrameworkFactory(frameworkFactory);
 
+        final String port = Integer.toString(findFreePort()); // test with valid port (ForkedFrameworkFactory should use given port)
+        Map<String, String> systemProperties = new HashMap<>();
+        systemProperties.put(RemoteFramework.RMI_PORT_KEY, port);
         Map<String, Object> frameworkProperties = new HashMap<String, Object>();
         frameworkProperties.put(Constants.FRAMEWORK_STORAGE, storage.getAbsolutePath());
         RemoteFramework framework = forkedFactory.fork(Collections.<String> emptyList(),
-            Collections.<String, String> emptyMap(), frameworkProperties);
+            systemProperties, frameworkProperties);
         framework.start();
 
         long bundleId = framework
@@ -105,12 +109,15 @@ public class ForkedFrameworkFactoryTest {
             new File("target/bundles/metainf-services.jar").getCanonicalPath()
         );
 
+        final String port = null; // test with null port (ForkedFrameworkFactory should find a free port itself)
+        Map<String, String> systemProperties = new HashMap<>();
+        systemProperties.put(RemoteFramework.RMI_PORT_KEY, port);
         Map<String, Object> frameworkProperties = new HashMap<String, Object>();
         frameworkProperties.put(Constants.FRAMEWORK_STORAGE, storage.getAbsolutePath());
         frameworkProperties.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
             "org.kohsuke.metainf_services");
         RemoteFramework framework = forkedFactory.fork(Collections.<String> emptyList(),
-            Collections.<String, String> emptyMap(), frameworkProperties, null,
+            systemProperties, frameworkProperties, null,
             bootClasspath);
         framework.start();
 

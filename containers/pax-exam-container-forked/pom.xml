@@ -44,10 +44,6 @@
         </dependency>
         <dependency>
             <groupId>org.ops4j.base</groupId>
-            <artifactId>ops4j-base-net</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ops4j.base</groupId>
             <artifactId>ops4j-base-io</artifactId>
         </dependency>
         <dependency>
@@ -168,6 +164,13 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>

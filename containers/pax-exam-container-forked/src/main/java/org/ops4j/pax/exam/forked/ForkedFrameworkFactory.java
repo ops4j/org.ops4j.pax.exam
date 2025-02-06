@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.ops4j.exec.ExecutionException;
-import org.ops4j.net.FreePort;
 import org.ops4j.pax.exam.ExamJavaRunner;
 import org.ops4j.pax.exam.TestContainerException;
 import org.ops4j.pax.swissbox.framework.RemoteFramework;
@@ -41,6 +40,8 @@ import org.ops4j.pax.swissbox.tracker.ServiceLookup;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.ops4j.pax.exam.util.NetUtils.findFreePort;
 
 /**
  * Wraps an OSGi {@link FrameworkFactory} to create and launch a framework in a forked Java virtual
@@ -60,8 +61,6 @@ public class ForkedFrameworkFactory {
 
     private FrameworkFactory frameworkFactory;
     private Registry registry;
-
-    private int port;
 
     private ExamJavaRunner javaRunner;
 
@@ -104,28 +103,25 @@ public class ForkedFrameworkFactory {
     public RemoteFramework fork(List<String> vmArgs, Map<String, String> systemProperties,
         Map<String, Object> frameworkProperties, List<String> beforeFrameworkClasspath,
         List<String> afterFrameworkClasspath) {
-        // TODO make port range configurable
-        FreePort freePort = new FreePort(21000, 21099);
-        port = freePort.getPort();
-        LOG.debug("using RMI registry at port {}", port);
-
-        String rmiName = "ExamRemoteFramework-" + UUID.randomUUID().toString();
 
         try {
-            String address = InetAddress.getLoopbackAddress().getHostAddress();
+            final String address = InetAddress.getLoopbackAddress().getHostAddress();
             System.setProperty("java.rmi.server.hostname", address);
-            registry = LocateRegistry.createRegistry(port);
-
-            Map<String, String> systemPropsNew = new HashMap<>(systemProperties);
+            final Map<String, String> systemPropsNew = new HashMap<>(systemProperties);
             systemPropsNew.put("java.rmi.server.hostname", address);
-            systemPropsNew.put(RemoteFramework.RMI_PORT_KEY, Integer.toString(port));
-            systemPropsNew.put(RemoteFramework.RMI_NAME_KEY, rmiName);
+            final int port = Integer.parseInt(systemPropsNew.computeIfAbsent(RemoteFramework.RMI_PORT_KEY, p -> Integer.toString(findFreePort())));
+            final String name = systemPropsNew.computeIfAbsent(RemoteFramework.RMI_NAME_KEY, n -> String.format("ExamRemoteFramework-%s", UUID.randomUUID()));
+
             String[] vmOptions = buildSystemProperties(vmArgs, systemPropsNew);
             String[] args = buildFrameworkProperties(frameworkProperties);
+
+            LOG.debug("using RMI registry at port {}", port);
+            registry = LocateRegistry.createRegistry(port);
+
             javaRunner = new ExamJavaRunner(false);
             javaRunner.exec(vmOptions, buildClasspath(beforeFrameworkClasspath, afterFrameworkClasspath),
                 RemoteFrameworkImpl.class.getName(), args, getJavaHome(), null);
-            return findRemoteFramework(port, rmiName);
+            return findRemoteFramework(port, name);
         }
         catch (RemoteException | ExecutionException | URISyntaxException exc) {
             throw new TestContainerException(exc);
@@ -237,7 +233,8 @@ public class ForkedFrameworkFactory {
         }
         while (framework == null && System.currentTimeMillis() < startedTrying + TIMEOUT);
         if (framework == null) {
-            throw new TestContainerException("cannot find remote framework in RMI registry", reason);
+            final String message = String.format("Cannot find remote framework (%s) in RMI registry (port %s)", rmiName, _port);
+            throw new TestContainerException(message, reason);
         }
         return framework;
 
