@@ -17,28 +17,9 @@
 
     <name>OPS4J Pax Exam Integration Tests</name>
 
-    <profiles>
-
-        <profile>
-            <id>karaf</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>karaf</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>osgi</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>osgi</module>
-            </modules>
-        </profile>
-
-    </profiles>
+    <modules>
+        <module>karaf</module>
+        <module>osgi</module>
+    </modules>
 
 </project>
