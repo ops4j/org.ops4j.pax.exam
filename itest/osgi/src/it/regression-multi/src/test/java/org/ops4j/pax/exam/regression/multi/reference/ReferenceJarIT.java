@@ -36,7 +36,7 @@ import org.ops4j.pax.swissbox.tracker.ServiceLookup;
 import org.osgi.framework.BundleContext;
 
 @RunWith(PaxExam.class)
-public class ReferenceJarTest {
+public class ReferenceJarIT {
 
     @Inject
     private BundleContext bc;
@@ -48,7 +48,6 @@ public class ReferenceJarTest {
     }
 
     @Test
-    @Ignore
     public void getHelloService() {
         Object service = ServiceLookup.getService(bc,
             "org.ops4j.pax.exam.sample9.pde.HelloService");
