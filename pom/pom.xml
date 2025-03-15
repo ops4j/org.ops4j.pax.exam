@@ -442,6 +442,11 @@
                 <version>2.18.0</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${dependency.slf4j.version}</version>

@@ -30,6 +30,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,34 +39,32 @@ import org.slf4j.LoggerFactory;
  */
 public class ArchiveExtractor {
 
+    private static final String ZIP_MIMETYPE = "application/zip";
+
+    private static final String GZIP_MIMETYPE = "application/gzip";
+
     private static final Logger logger = LoggerFactory.getLogger(ArchiveExtractor.class);
 
     private ArchiveExtractor() {
     }
 
     /**
-     * Extract zip or tar.gz archives to a target folder
+     * Extract archives to a target directory
      *
-     * @param sourceURL    url of the archive to extract
-     * @param targetFolder where to extract to
+     * @param sourceURL url of the archive to extract
+     * @param targetDir where to extract to
      * @throws IOException on I/O error
      */
-    public static void extract(final URL sourceURL, final File targetFolder) throws IOException {
-        logger.debug("extracting {} to {}", sourceURL, targetFolder);
-        if (sourceURL.getProtocol().equals("file") || sourceURL.getProtocol().equals("http") || sourceURL.getProtocol().equals("https")) {
-            if (sourceURL.getFile().endsWith(".zip")) {
-                extractZip(sourceURL, targetFolder);
-            } else if (sourceURL.getFile().endsWith(".tar.gz")) {
-                extractTarGz(sourceURL, targetFolder);
-            } else {
-                throw new IllegalStateException(String.format("Unknown packaging (%s); only zip and tar.gz can be handled.", sourceURL));
-            }
-            return;
-        }
-        if (sourceURL.toExternalForm().endsWith("/zip")) {
-            extractZip(sourceURL, targetFolder);
-        } else if (sourceURL.toExternalForm().endsWith("/tar.gz")) {
-            extractTarGz(sourceURL, targetFolder);
+    public static void extract(final URL sourceURL, final File targetDir) throws IOException {
+        logger.info("extracting {} to {}", sourceURL, targetDir);
+
+        final Tika tika = new Tika();
+        final String mimeType = tika.detect(sourceURL);
+
+        if (ZIP_MIMETYPE.equals(mimeType)) {
+            extractZip(sourceURL, targetDir);
+        } else if (GZIP_MIMETYPE.equals(mimeType)) { // could be less naive; if mime type application/gzip is detected, we assume a tar inside
+            extractTarGz(sourceURL, targetDir);
         } else {
             throw new IllegalStateException(String.format("Unknown packaging (%s); only zip and tar.gz can be handled.", sourceURL));
         }
@@ -86,7 +85,7 @@ public class ArchiveExtractor {
         }
     }
 
-    private static void extract(final ArchiveInputStream is, final File targetDir) throws IOException {
+    private static void extract(final ArchiveInputStream<? extends ArchiveEntry> is, final File targetDir) throws IOException {
         if (targetDir.exists()) {
             FileUtils.forceDelete(targetDir);
         }
