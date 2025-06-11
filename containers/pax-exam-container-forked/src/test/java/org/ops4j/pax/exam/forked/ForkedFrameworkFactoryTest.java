@@ -118,7 +118,7 @@ public class ForkedFrameworkFactoryTest {
             "org.kohsuke.metainf_services");
         RemoteFramework framework = forkedFactory.fork(Collections.<String> emptyList(),
             systemProperties, frameworkProperties, null,
-            bootClasspath);
+            bootClasspath, new String[0]);
         framework.start();
 
         File testBundle = generateBundle();
@@ -153,7 +153,7 @@ public class ForkedFrameworkFactoryTest {
             "org.kohsuke.metainf_services");
         forkedFactory.fork(Collections.<String> emptyList(),
             Collections.<String, String> emptyMap(), frameworkProperties, null,
-            bootClasspath);
+            bootClasspath, new String[0]);
     }
 
     private File generateBundle() throws IOException {
