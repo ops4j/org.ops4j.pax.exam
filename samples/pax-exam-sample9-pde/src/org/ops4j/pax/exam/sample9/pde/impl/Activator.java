@@ -70,7 +70,9 @@ public class Activator implements BundleActivator {
     public void stop(BundleContext bc) throws Exception {
 
         String blockOnStop = System.getProperty("pax.exam.regression.blockOnStop", "false");
+        System.out.println("### pax.exam.regression.blockOnStop: " + blockOnStop);
         if (Boolean.parseBoolean(blockOnStop)) {
+            System.out.println("### blocking shutdown...");
             Thread.sleep(Long.MAX_VALUE);
         }
     }
