@@ -44,26 +44,26 @@ public class BeforeAfterTest extends BeforeAfterParent {
 
     @Before
     public void setUp() {
-        addMessage("Before");
+        Messages.addMessage("Before");
         assertThat(bundleContext, is(notNullValue()));
     }
 
     @After
     public void tearDown() {
-        addMessage("After");
+        Messages.addMessage("After");
         assertThat(bundleContext, is(notNullValue()));
     }
 
     @Test
     public void getInjectedService() {
-        addMessage("Test");
+        Messages.addMessage("Test");
         assertThat(helloService, is(notNullValue()));
         assertThat(helloService.getMessage(), is(equalTo("Hello Pax!")));
     }
 
     @Test
     public void injectedBundleContext() {
-        addMessage("Test");
+        Messages.addMessage("Test");
         assertThat(bundleContext, is(notNullValue()));
     }
 }

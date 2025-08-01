@@ -38,6 +38,11 @@
             <artifactId>jakarta.transaction-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2-mvstore</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- Pax Exam -->
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>

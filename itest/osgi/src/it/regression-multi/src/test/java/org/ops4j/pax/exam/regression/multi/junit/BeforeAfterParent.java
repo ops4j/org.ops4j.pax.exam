@@ -15,55 +15,38 @@
  */
 package org.ops4j.pax.exam.regression.multi.junit;
 
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.url;
-import static org.ops4j.pax.exam.regression.multi.RegressionConfiguration.regressionDefaults;
-
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
-
 import org.junit.After;
 import org.junit.Before;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.TestContainerException;
 import org.ops4j.pax.exam.util.PathUtils;
+
+import static org.ops4j.pax.exam.CoreOptions.junitBundles;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.url;
+import static org.ops4j.pax.exam.regression.multi.RegressionConfiguration.regressionDefaults;
 
 public class BeforeAfterParent {
 
     @Configuration
     public Option[] config() {
-        return options(regressionDefaults(), url("reference:file:" + PathUtils.getBaseDir()
-            + "/target/pax-exam-sample9-pde.jar"), junitBundles());
+        return options(
+            regressionDefaults(),
+            url(String.format("reference:file:%s/target/pax-exam-sample9-pde.jar", PathUtils.getBaseDir())),
+            junitBundles(),
+            mavenBundle().groupId("com.h2database").artifactId("h2-mvstore").versionAsInProject()
+        );
     }
 
     @Before
     public void before() {
-        addMessage("Before in parent");
+        Messages.addMessage("Before in parent");
     }
 
     @After
     public void after() {
-        addMessage("After in parent");
+        Messages.addMessage("After in parent");
     }
 
-    public static void clearMessages() throws BackingStoreException {
-        Preferences prefs = Preferences.userNodeForPackage(BeforeAfterParent.class);
-        prefs.clear();
-        prefs.sync();
-    }
-
-    public static void addMessage(String message) {
-        Preferences prefs = Preferences.userNodeForPackage(BeforeAfterParent.class);
-        int numMessages = prefs.getInt("numMessages", 0);
-        prefs.put("message." + numMessages, message);
-        prefs.putInt("numMessages", ++numMessages);
-        try {
-            prefs.sync();
-        }
-        catch (BackingStoreException exc) {
-            throw new TestContainerException(exc);
-        }
-    }
 }

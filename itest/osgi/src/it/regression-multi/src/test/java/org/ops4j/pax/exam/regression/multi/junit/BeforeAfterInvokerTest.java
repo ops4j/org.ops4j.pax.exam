@@ -15,12 +15,8 @@
  */
 package org.ops4j.pax.exam.regression.multi.junit;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 import org.junit.Assume;
 import org.junit.Test;
@@ -31,9 +27,9 @@ import org.junit.runner.Result;
  * To check that Pax Exam invokes {@code @Before} and {@code @After} methods in the correct order,
  * we need another level of indirection as Pax Exam cannot do checks on itself.
  * <p>
- * This test invokes JUnit to run a Pax Exam test. User preferences are used as a simple
+ * This test invokes JUnit to run a Pax Exam test. H2 MVStore is used as a simple
  * communication channel between the inner and the outer JUnit instance. Methods invoked by inner
- * methods append messages to the preference store.
+ * methods append messages to the stored map.
  * <p>
  * The outer test checks that expected messages were appended in the correct order.
  * 
@@ -42,21 +38,17 @@ import org.junit.runner.Result;
  */
 public class BeforeAfterInvokerTest {
 
-    private Preferences prefs;
-
     @Test
-    public void beforeAfterMethodInvocationOrder() throws IOException, BackingStoreException {
+    public void beforeAfterMethodInvocationOrder() {
         Assume.assumeThat(System.getProperty("pax.exam.container"), is("native"));
 
-        BeforeAfterParent.clearMessages();
+        Messages.clearMessages();
 
         JUnitCore junit = new JUnitCore();
         Result run = junit.run(BeforeAfterTest.class);
         assertEquals(0, run.getFailureCount());
 
-        prefs = Preferences.userNodeForPackage(BeforeAfterParent.class);
-
-        int numMessages = prefs.getInt("numMessages", 0);
+        int numMessages = Messages.countMessages();
         int messageNum = 0;
 
         // 2 tests * 1 framework * 5 messages per test
@@ -72,7 +64,7 @@ public class BeforeAfterInvokerTest {
     }
 
     private void assertMessage(String expected, int messageNum) {
-        String message = prefs.get("message." + messageNum, "");
+        final String message = Messages.getMessage(messageNum);
         assertEquals(expected, message);
     }
 }
