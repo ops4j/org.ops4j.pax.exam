@@ -54,7 +54,7 @@
                                     <version>3.9.11</version>
                                     <message>This project requires Maven 3.9.11</message>
                                 </requireMavenVersion>
-                                <DependencyConvergence />
+                                <dependencyConvergence />
                                 <bannedDependencies>
                                     <excludes>
                                         <exclude>commons-collections:commons-collections</exclude>
@@ -144,6 +144,11 @@
                         </instructions>
                     </configuration>
                 </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.2</version>
+              </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
