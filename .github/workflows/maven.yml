@@ -16,10 +16,10 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-      - run: mvn wrapper:wrapper --no-transfer-progress -Dmaven="3.9.9"
+      - run: mvn wrapper:wrapper --no-transfer-progress -Dmaven="3.9.11"
       - run: ./mvnw -B install --fail-at-end --no-transfer-progress --file pom.xml
