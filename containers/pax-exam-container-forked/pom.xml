@@ -175,9 +175,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <environmentVariables>
-                      <SYSTEMROOT>C:\windows</SYSTEMROOT>
-                    </environmentVariables>
                 </configuration>
             </plugin>
         </plugins>
