@@ -120,11 +120,6 @@
             <artifactId>org.eclipse.osgi</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>uk.org.webcompere</groupId>
-            <artifactId>system-stubs-junit4</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

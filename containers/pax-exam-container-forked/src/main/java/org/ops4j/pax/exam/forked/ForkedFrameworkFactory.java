@@ -102,7 +102,7 @@ public class ForkedFrameworkFactory {
      */
     public RemoteFramework fork(List<String> vmArgs, Map<String, String> systemProperties,
         Map<String, Object> frameworkProperties, List<String> beforeFrameworkClasspath,
-        List<String> afterFrameworkClasspath, String[] env) {
+        List<String> afterFrameworkClasspath) {
 
         try {
             final String address = InetAddress.getLoopbackAddress().getHostAddress();
@@ -120,7 +120,7 @@ public class ForkedFrameworkFactory {
 
             javaRunner = new ExamJavaRunner(false);
             javaRunner.exec(vmOptions, buildClasspath(beforeFrameworkClasspath, afterFrameworkClasspath),
-                RemoteFrameworkImpl.class.getName(), args, getJavaHome(), null, env);
+                RemoteFrameworkImpl.class.getName(), args, getJavaHome(), null);
             return findRemoteFramework(port, name);
         }
         catch (RemoteException | ExecutionException | URISyntaxException exc) {
@@ -143,7 +143,7 @@ public class ForkedFrameworkFactory {
      */
     public RemoteFramework fork(List<String> vmArgs, Map<String, String> systemProperties,
         Map<String, Object> frameworkProperties) {
-        return fork(vmArgs, systemProperties, frameworkProperties, null, null, new String[0]);
+        return fork(vmArgs, systemProperties, frameworkProperties, null, null);
     }
 
     private String[] buildSystemProperties(List<String> vmArgs, Map<String, String> systemProperties) {
