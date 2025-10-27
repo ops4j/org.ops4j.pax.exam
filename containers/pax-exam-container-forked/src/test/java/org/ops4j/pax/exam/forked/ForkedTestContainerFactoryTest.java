@@ -115,6 +115,9 @@ public class ForkedTestContainerFactoryTest {
         Assert.assertNotNull(containers);
         Assert.assertNotNull(containers[0]);
 
+        System.out.println("TEST_ENVIRONMENT");
+        System.getenv().forEach((key, value) -> System.out.printf("%s=%s%n", key, value));
+
         ForkedTestContainer container = (ForkedTestContainer) containers[0];
         container.start();
 
@@ -147,6 +150,9 @@ public class ForkedTestContainerFactoryTest {
         @Override
         public void start(BundleContext bc) throws Exception {
             Class<?> clazz = getClass().getClassLoader().loadClass(className);
+
+            System.out.println("FORKED_ENVIRONMENT");
+            System.getenv().forEach((key, value) -> System.out.printf("%s=%s%n", key, value));
 
             if (clazz == null) {
                 throw new IllegalStateException("Class '" + className + "' not loaded");
