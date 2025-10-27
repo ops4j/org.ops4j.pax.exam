@@ -45,16 +45,10 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import uk.org.webcompere.systemstubs.rules.EnvironmentVariablesRule;
 
 import static org.ops4j.pax.tinybundles.TinyBundles.rawBuilder;
 
 public class ForkedTestContainerFactoryTest {
-
-    @Rule
-    public EnvironmentVariablesRule environment = new EnvironmentVariablesRule(
-            "PROPAGATE", "test"
-    );
 
     @Test
     public void withBootClasspathMvn() throws BundleException, IOException,
