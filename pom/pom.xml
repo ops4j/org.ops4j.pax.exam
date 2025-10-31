@@ -552,13 +552,6 @@
             </dependency>
 
             <dependency>
-                <groupId>uk.org.webcompere</groupId>
-                <artifactId>system-stubs-junit4</artifactId>
-                <version>2.1.8</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2-mvstore</artifactId>
                 <version>2.4.240</version>
